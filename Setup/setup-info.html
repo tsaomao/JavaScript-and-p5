@@ -11,7 +11,7 @@
     <p>
       <ol>
         <li>Have a local git repository created.<br />This one should live on your laptop or iPad or whatever you do your actual content creation or development or coding or whatever project deliverables you make.</li>
-        <li>Create a deploy folder on the web server.<br />You need to have shell (preferrably SSH) access to the web server. The server itself must be able to run git, and it should be UNIX/Linux based for these instructions to work. For what it's worth, I have shared hosting on Dreamhost, and that's enough.</li>
+        <li>Create a deploy folder and target folder on the web server.<br />You need to have shell (preferrably SSH) access to the web server. The server itself must be able to run git, and it should be UNIX/Linux based for these instructions to work. For what it's worth, I have shared hosting on Dreamhost, and that's enough.</li>
         <li>Add a bare repository to the deployment folder that you just created.<br />This will create a really cluttered looking folder once the "bare" repository is created. I had no idea that I should expect this the first time I tried it, so be prepared. The subfolder you'll want to keep in mind is "./hooks" in the "bare" repository.</li>
         <li>Add the "post-receive" hook for the appropriate git push event<br />This is where you'll need the fixed up script that helpful commenter used. Still, you have to use your noggin, to keep the different directories straight while you set this up. Also, don't forget to make it executable (or it won't run when it's supposed to).</li>
         <li>Add the remote repository to your local git repository.<br />This remote is how you'll kick off deployments.</li>
@@ -20,9 +20,11 @@
     </p>
     <h4>Details</h4>
     <p>
-      <ul>
-        <li></li>
-      </ul>
+      <ol>
+        <li>Local git repository<br />If you aren't familiar with git basics, you ought to find a good primer or introductory guide. Pick one with a style you like. There are plenty of choices.</li>
+        <li>Deploy and Target Folder<br />For this method to work, you need a local git repository, on the computer(s) you use to create your code, content, or whatever you're keeping and deploying with git. You also need a deploy directory, which really just exists to receive the git push you do for your deployment, AND you need the actual "production" directory, which I refer to here as the Target directory. So the deploy folder is the middleman directory. Create it and the Target or production directory, then configure the deploy folder with the next two steps.<br />For my part, on my host:<br /><code>ssh user@hostname</code><br /><code>cd malcolmgin.com</code><br /><code>mkdir gitDeploy</code> <em>(This is the deploy directory>)</em><br /><code>mkdir TheCodeTrain</code> <em>(This is the target/production directory)</em></li>
+        <li>Bare repository<br /></li>
+      </ol>
     </p>
     <h3>References</h3>
     <p>Of assistance were the following:
