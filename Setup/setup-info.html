@@ -22,8 +22,9 @@
     <p>
       <ol>
         <li>Local git repository<br />If you aren't familiar with git basics, you ought to find a good primer or introductory guide. Pick one with a style you like. There are plenty of choices.</li>
-        <li>Deploy and Target Folder<br />For this method to work, you need a local git repository, on the computer(s) you use to create your code, content, or whatever you're keeping and deploying with git. You also need a deploy directory, which really just exists to receive the git push you do for your deployment, AND you need the actual "production" directory, which I refer to here as the Target directory. So the deploy folder is the middleman directory. Create it and the Target or production directory, then configure the deploy folder with the next two steps.<br />For my part, on my host:<br /><code>ssh user@hostname</code><br /><code>cd malcolmgin.com</code><br /><code>mkdir gitDeploy</code> <em>(This is the deploy directory>)</em><br /><code>mkdir TheCodeTrain</code> <em>(This is the target/production directory)</em></li>
-        <li>Bare repository<br /></li>
+        <li>Deploy and Target Folder<br />For this method to work, you need a local git repository, on the computer(s) you use to create your code, content, or whatever you're keeping and deploying with git. You also need a deploy directory, which really just exists to receive the git push you do for your deployment, AND you need the actual "production" directory, which I refer to here as the Target directory. So the deploy folder is the middleman directory. Create it and the Target or production directory, then configure the deploy folder with the next two steps.<br />For my part, on my host:<br /><code>ssh user@hostname</code><br /><code>cd malcolmgin.com</code><br /><code>mkdir gitDeploy</code> <em>(This is the deploy directory)</em><br /><code>mkdir TheCodeTrain</code> <em>(This is the target/production directory)</em></li>
+        <li>Bare repository<br />As I noted above, this puts a whole lotta files in the directory you use for the deploy (middleman directory). Enough that it seriously put me off the first time I tried to get this done.<br />Commands on my host:<br /><code>cd gitDeploy</code><br /><code>git init --bare .</code></li>
+        <li>The Hook<br /></li>
       </ol>
     </p>
     <h3>References</h3>
