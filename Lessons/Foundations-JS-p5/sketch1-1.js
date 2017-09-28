@@ -9,5 +9,5 @@ function setup() {
 
 function draw() {
   // draw() gets called on a cycle (so it can keep rendering).
-  rect(50, 50, 20, 20)
+  rect(50, 50, 20, 20);
 }
