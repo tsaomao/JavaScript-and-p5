@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style> body {padding: 0; margin: 0;} </style>
+  </head>
+  <body>
+    <h2>Setup Notes</h2>
+    <h3>Git Deployment</h3>
+    <p>After trying, failing and despairing that I'd ever figure out how to use git to deploy files to a production or demo web hosting service, I finally cobbled it together, and wanted to save and record it here.</p>
+    <p>The pieces are as follows:</p>
+    <p>
+      <ol>
+        <li>Have a local git repository created.<br />This one should live on your laptop or iPad or whatever you do your actual content creation or development or coding or whatever project deliverables you make.</li>
+        <li>Create a deploy folder on the web server.<br />You need to have shell (preferrably SSH) access to the web server. The server itself must be able to run git, and it should be UNIX/Linux based for these instructions to work. For what it's worth, I have shared hosting on Dreamhost, and that's enough.</li>
+        <li>Add a bare repository to the deployment folder that you just created.<br />This will create a really cluttered looking folder once the "bare" repository is created. I had no idea that I should expect this the first time I tried it, so be prepared. The subfolder you'll want to keep in mind is "./hooks" in the "bare" repository.</li>
+        <li>Add the "post-receive" hook for the appropriate git push event<br />This is where you'll need the fixed up script that helpful commenter used. Still, you have to use your noggin, to keep the different directories straight while you set this up. Also, don't forget to make it executable (or it won't run when it's supposed to).</li>
+        <li>Add the remote repository to your local git repository.<br />This remote is how you'll kick off deployments.</li>
+        <li>Every time you are ready to deploy, push your whole repository to a deployment.</li>
+      </ol>
+    </p>
+    <h4>Details</h4>
+    <p>
+      <ul>
+        <li></li>
+      </ul>
+    </p>
+    <h3>References</h3>
+    <p>Of assistance were the following:
+      <ul>
+        <li><a href="https://gist.github.com/noelboss/3fe13927025b89757f8fb12e9066f2fa">Simple automated GIT Deployment using GIT Hooks</a><br />Poor English and lots of typos, but a great guide that works very well anyhow.</li>
+        <li><a href="https://gist.github.com/noelboss/3fe13927025b89757f8fb12e9066f2fa#gistcomment-2012975">A commenter ...</a><br />... who took the time to clean up the included script and make it workable, fixing English typos and other problems.</li>
+        <li><a href="https://help.dreamhost.com/hc/en-us/articles/227816388-Using-Git-with-DreamPress">Using Git with DreamPress</a><br />My host is Dreamhost, but close enough!</li>
+        <li><a href="https://git-scm.com/book/gr/v2/Customizing-Git-Git-Hooks">Customizing Git - Git Hooks</a> (GitHub Documentation)<br />For clarifying how hooks work, and verifying that "post-receive" was still a valid hook event.</li>
+      </ul>
+    </p>
+  </body>
+</html>
