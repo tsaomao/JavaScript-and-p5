@@ -23,8 +23,48 @@
       <ol>
         <li>Local git repository<br />If you aren't familiar with git basics, you ought to find a good primer or introductory guide. Pick one with a style you like. There are plenty of choices.</li>
         <li>Deploy and Target Folder<br />For this method to work, you need a local git repository, on the computer(s) you use to create your code, content, or whatever you're keeping and deploying with git. You also need a deploy directory, which really just exists to receive the git push you do for your deployment, AND you need the actual "production" directory, which I refer to here as the Target directory. So the deploy folder is the middleman directory. Create it and the Target or production directory, then configure the deploy folder with the next two steps.<br />For my part, on my host:<br /><code>ssh user@hostname</code><br /><code>cd malcolmgin.com</code><br /><code>mkdir gitDeploy</code> <em>(This is the deploy directory)</em><br /><code>mkdir TheCodeTrain</code> <em>(This is the target/production directory)</em></li>
-        <li>Bare repository<br />As I noted above, this puts a whole lotta files in the directory you use for the deploy (middleman directory). Enough that it seriously put me off the first time I tried to get this done.<br />Commands on my host:<br /><code>cd gitDeploy</code><br /><code>git init --bare .</code></li>
-        <li>The Hook<br /></li>
+        <li>Bare repository<br />As I noted above, this puts a whole lotta files in the directory you use for the deploy (middleman directory). Enough that it seriously put me off the first time I tried to get this done.<br />Commands on my host:<br /><code>cd gitDeploy</code><br /><code>git init --bare .</code> <em>(Note the "." at the end.)</em></li>
+        <li>The Hook<br />The hook, "post-receive", is an executable script file you create in the "hooks" subdirectory of your deployment repository. You have to create it, paste in the template provided, and edit the template appropriately, save, and then use the chmod command to be sure that the file <em>can</em> be executed (by the deployment repository).<br />The template script:<br /><code>
+#!/bin/bash<br />
+set -eu<br />
+<br />
+TARGET="[production file path]"<br />
+GIT_DIR="[deployment file path]"<br />
+BRANCH="[the branch name you want for deployments]"<br />
+<br />
+while read oldrev newrev ref<br />
+do<br />
+        # only checking out the master (or whatever branch you would like to deploy)<br />
+        if [[ $ref = refs/heads/"$BRANCH" ]];<br />
+        then<br />
+                echo "Ref $ref received. Deploying ${BRANCH} branch to production..."<br />
+                git --work-tree="$TARGET" --git-dir="$GIT_DIR" checkout -f<br />
+        else<br />
+                echo "Ref $ref received. Doing nothing: only the ${BRANCH} branch may be deployed on this server."<br />
+        fi<br />
+done<br />
+        </code><br />On my host, filled out:<br /><code>
+#!/bin/bash<br />
+set -eu<br />
+<br />
+TARGET="/home/perigee/malcolmgin.com/TheCodeTrain"<br />
+GIT_DIR="/home/perigee/malcolmgin.com/gitDeploy"<br />
+BRANCH="master"<br />
+<br />
+while read oldrev newrev ref<br />
+do<br />
+# only checking out the master (or whatever branch you would like to deploy)<br />
+if [[ $ref = refs/heads/"$BRANCH" ]];<br />
+then<br />
+        echo "Ref $ref received. Deploying ${BRANCH} branch to production..."<br />
+        git --work-tree="$TARGET" --git-dir="$GIT_DIR" checkout -f<br />
+else<br />
+        echo "Ref $ref received. Doing nothing: only the ${BRANCH} branch may be deployed on this server."<br />
+fi<br />
+done
+</code><br />So I take this template and I create a file named "post-receive" in the hooks subdirectory of the deployment directory on my web host. Then I make it executable:<br /><code>cd hooks<br />
+vi post-receive</code><br /><em>(Then in vi I put the editor into insert mode, I paste in the filled out template above, and I save the file and quit vi. Then I use chmod to make the file executable:)</em><br /><code>chmod post-receive 755</code><br />Your business now done on your web most, you should now be able to exit your SSH session and work on your local repository.</li>
+        <li>Remote Repository<br />It remains, now, to add your remote repository (and your SSH key, if needed), to your local setup. For the remote repository, my URL for the deployment repository is "ssh://username@malcolmgin.com/home/perigee/malcolmgin.com/gitDeploy" so the command in my local repository is:<br /><code>git remote add production ssh://username@malcolmgin.com/home/perigee/malcolmgin.com/gitDeploy</code><br />You can test whether this worked by using the command, <code>git remote show production</code>. If you have an error related to a missing key, ensure your key is properly configured in your <code>~/.ssh</code> directory. </li>
       </ol>
     </p>
     <h3>References</h3>
