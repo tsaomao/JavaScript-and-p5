@@ -7,7 +7,7 @@ var Engine = Matter.Engine,
 
 var engine;
 var world;
-var box1;
+var boxes = [];
 
 function setup() {
   // setup() gets called once
@@ -20,13 +20,17 @@ function setup() {
   world = engine.world;
   // make sure the world is running
   Engine.run(engine);
-  // create an object
-  box1 = new Box(200, 100, 50, 50);
+}
+
+function mousePressed() {
+  boxes.push(new Box(mouseX, mouseY, 20, 20));
 }
 
 function draw() {
   // draw() gets called on a cycle (so it can keep rendering).
   background(51);
   // query physics engine for box location
-  box1.show();
+  for (var i = 0; i < boxes.length; i++) {
+    boxes[i].show();
+  }
 }
