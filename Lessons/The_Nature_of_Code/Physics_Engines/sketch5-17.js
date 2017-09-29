@@ -18,17 +18,15 @@ function setup() {
   engine = Engine.create();
   // create world var to keep track of the world
   world = engine.world;
-  // create an object
-  box1 = Bodies.rectangle(100, 100, 80, 80);
   // make sure the world is running
   Engine.run(engine);
-  // Add the body to the world (so physics can affect it)
-  World.add(world, box1);
+  // create an object
+  box1 = new Box(200, 100, 50, 50);
 }
 
 function draw() {
   // draw() gets called on a cycle (so it can keep rendering).
   background(51);
   // query physics engine for box location
-  rect(box1.position.x, box1.position.y, 80, 80);
+  box1.show();
 }
