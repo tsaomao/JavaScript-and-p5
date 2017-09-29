@@ -10,4 +10,6 @@ function setup() {
 function draw() {
   // draw() gets called on a cycle (so it can keep rendering).
   rect(100, 200, 75, 125);
+  line(75, 125, 150, 175);
+  arc(50, 50, 80, 80, 0, PI+QUARTER_PI, CHORD);
 }
