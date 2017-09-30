@@ -13,7 +13,7 @@ var ground;
 
 function setup() {
   // setup() gets called once
-  createCanvas(1200, 800);
+  createCanvas(windowWidth - 100, windowHeight - 100);
   // make shapes get filled with white instead of default black
   fill(255);
   // create an engine
@@ -40,7 +40,7 @@ function mouseDragged() {
 function keyTyped() {
   if (key === ' ') {
     // Make a big box
-    boxes.push(new Box(width/2, 10, random(200, 400), random(200, 400)));
+    boxes.push(new Box(mouseX, 10, random(200, 400), random(200, 400)));
   } else if (key === 'c') {
     // Clear works by setting all boxes to a dead height and then they get swept
     // out at the next cleanup.
