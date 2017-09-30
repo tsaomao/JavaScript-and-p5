@@ -30,16 +30,6 @@ function setup() {
 function draw() {
   // draw() gets called on a cycle (so it can keep rendering).
   background(51);
-
-  // get slider value for rotAngle
-  rotAngle = slider.value();
-  jitterAngle = jitterSlider.value();
-
-  // draw trunk
-  stroke(255);
-  strokeWeight(4);
-  translate(width/2, height);
-  branch(toplen, maxLevels);
 }
 
 function resizeCanvas_m() {
