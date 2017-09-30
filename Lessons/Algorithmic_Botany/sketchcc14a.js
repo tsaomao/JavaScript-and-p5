@@ -16,13 +16,22 @@ var cnv;
 var shortenFactor = 0.67;
 var shortestBranch = 4; // pixels
 var rotAngle;
+var jitterAngle;
 var toplen;
 var maxLevels; // of recursion, for this canvas size
 
 // Controls
+var explanatoryText;
+var absExplanatoryTextPos;
 var slider;
 var sliderLabel;
 var absAngleSliderPos;
+var jitterSlider;
+var jitterSliderLabel;
+var absJitterSliderPos;
+
+// Keep record of jitter angles
+
 
 function setup() {
   // setup() gets called once
@@ -43,9 +52,14 @@ function setup() {
   rotAngle = PI/4;
 
   // Controls
+  explanatoryText = createElement('p', "Note: Jitter doesn't work the way I want it to. I need to figure out how to store the randomness for later retrieval while building the branches.")
+  absExplanatoryTextPos = explanatoryText.position();
   sliderLabel = createElement('p', 'Angle (0 to pi/2):');
   absAngleSliderPos = sliderLabel.position();
   slider = createSlider(0, PI/2, rotAngle, 0.01);
+  jitterSliderLabel = createElement('p', 'Angle Jitter (0 to pi/8):')
+  absJitterSliderPos = jitterSliderLabel.position();
+  jitterSlider = createSlider(0, PI/8, 0, 0.01);
 
   adjustControlPositions();
 }
@@ -56,6 +70,7 @@ function draw() {
 
   // get slider value for rotAngle
   rotAngle = slider.value();
+  jitterAngle = jitterSlider.value();
 
   // draw trunk
   stroke(255);
@@ -85,11 +100,17 @@ function windowResized() {
 function adjustControlPositions(elem) {
   //sliderLabel.position((windowWidth - width)/2, cnv.position().y + (height / 2) + 10);
   //slider.position(sliderLabel.position().x + sliderLabel.width, sliderLabel.position().y);
-  sliderLabel.position(cnv.position().x, absAngleSliderPos.y);
+  explanatoryText.position(cnv.position().x, absExplanatoryTextPos.y);
+
+  sliderLabel.position(cnv.position().x, absAngleSliderPos.y - 10);
   slider.position(sliderLabel.position().x + 120, sliderLabel.position().y);
+
+  jitterSliderLabel.position(cnv.position().x, absJitterSliderPos.y - 60);
+  jitterSlider.position(jitterSliderLabel.position().x + 200, jitterSliderLabel.position().y);
 }
 
 function branch(len, weight) {
+  var jitterFudge = random([-1, 1]) * random(jitterAngle);
   // My first impulse was to define a temporary variable for weight
   // forgetting, of course, that recursion takes care of this for you
   // as it drills down the execution path/flow.
@@ -99,13 +120,13 @@ function branch(len, weight) {
   if (len > shortestBranch) {
     // push() saves the current transformation
     push();
-    rotate(rotAngle);
+    rotate(rotAngle + jitterFudge);
     branch(len * shortenFactor, weight - 1);
     // pop() restores the transformation
     pop();
     // save again
     push();
-    rotate(-rotAngle);
+    rotate(-rotAngle + jitterFudge);
     branch(len * shortenFactor, weight - 1);
     // restore again
     pop();
