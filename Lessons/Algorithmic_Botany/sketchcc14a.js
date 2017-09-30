@@ -22,6 +22,7 @@ var maxLevels; // of recursion, for this canvas size
 // Controls
 var slider;
 var sliderLabel;
+var absAngleSliderPos;
 
 function setup() {
   // setup() gets called once
@@ -43,6 +44,7 @@ function setup() {
 
   // Controls
   sliderLabel = createElement('p', 'Angle (0 to pi/2):');
+  absAngleSliderPos = sliderLabel.position();
   slider = createSlider(0, PI/2, rotAngle, 0.01);
 
   adjustControlPositions();
@@ -83,17 +85,7 @@ function windowResized() {
 function adjustControlPositions(elem) {
   //sliderLabel.position((windowWidth - width)/2, cnv.position().y + (height / 2) + 10);
   //slider.position(sliderLabel.position().x + sliderLabel.width, sliderLabel.position().y);
-  console.log("windowWidth: " + windowWidth);
-  console.log("width: " + width);
-  console.log("height: " + height);
-  console.log("cnv.position().x: " + cnv.position().x);
-  console.log("cnv.position().y: " + cnv.position().y);
-  console.log(sliderLabel);
-  console.log("sliderLabel.width: " + sliderLabel.width);
-  console.log("sliderLabel.position().x: " + sliderLabel.position().x);
-  console.log("sliderLabel.position().y: " + sliderLabel.position().y);
-
-  sliderLabel.position(cnv.position().x, sliderLabel.position().y);
+  sliderLabel.position(cnv.position().x, absAngleSliderPos.y);
   slider.position(sliderLabel.position().x + 120, sliderLabel.position().y);
 }
 
