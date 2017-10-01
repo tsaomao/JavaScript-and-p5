@@ -18,9 +18,11 @@ var shortestBranch = 4; // pixels
 var rotAngle;
 var toplen;
 var maxLevels; // of recursion, for this canvas size
+var tree = [];
+var leaves = [];
+var root;
 
-// Controls
-var slider;
+var count = 0;
 
 function setup() {
   // setup() gets called once
@@ -40,21 +42,49 @@ function setup() {
   maxLevels = findlevels(toplen);
   rotAngle = PI/4;
 
-  slider = createSlider(0, TWO_PI, rotAngle, 0.01);
+  // Set up tree root trunk
+  var a = createVector(width/2, height);
+  var b = createVector(width/2, height - 100);
+  root = new Branch(a, b);
+
+  tree[0] = root;
 }
 
 function draw() {
   // draw() gets called on a cycle (so it can keep rendering).
   background(51);
 
-  // get slider value for rotAngle
-  rotAngle = slider.value();
+  for (var i = 0; i < tree.length; i++) {
+    tree[i].show();
+    // tree[i].jitter();
+  }
 
-  // draw trunk
-  stroke(255);
-  strokeWeight(4);
-  translate(width/2, height);
-  branch(toplen, maxLevels);
+  for (var i = 0; i < leaves.length; i++) {
+    fill(255, 0, 100, 100);
+    noStroke();
+    ellipse(leaves[i].x, leaves[i].y, 8, 8);
+    leaves[i].y += random(0, 2);
+  }
+}
+
+function mousePressed() {
+  for(var i = tree.length - 1; i >= 0; i--) {
+    if (!tree[i].finished) {
+      tree.push(tree[i].rightBranch());
+      tree.push(tree[i].leftBranch());
+      tree[i].finished = true;
+    }
+  }
+  count++;
+
+  if (count === 6) {
+    for (var i = 0; i < tree.length; i++) {
+      if (!tree[i].finished){
+        var leaf = tree[i].end.copy();
+        leaves.push(leaf);
+      }
+    }
+  }
 }
 
 function resizeCanvas_m() {
@@ -72,30 +102,6 @@ function centerCanvas() {
 function windowResized() {
   centerCanvas();
   resizeCanvas_m();
-}
-
-function branch(len, weight) {
-  // My first impulse was to define a temporary variable for weight
-  // forgetting, of course, that recursion takes care of this for you
-  // as it drills down the execution path/flow.
-  strokeWeight(weight);
-  line(0, 0, 0, -len);
-  translate(0, -len);
-  if (len > shortestBranch) {
-    // push() saves the current transformation
-    push();
-    rotate(rotAngle);
-    branch(len * shortenFactor, weight - 1);
-    // pop() restores the transformation
-    pop();
-    // save again
-    push();
-    rotate(-rotAngle);
-    branch(len * shortenFactor, weight - 1);
-    // restore again
-    pop();
-  }
-  // line(0, 0, 0, -len*0.67);
 }
 
 function findlevels(len) {
