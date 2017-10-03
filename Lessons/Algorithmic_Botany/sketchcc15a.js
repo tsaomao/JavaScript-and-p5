@@ -38,13 +38,14 @@ function setup() {
   // make sure the world is running
   Engine.run(engine);
 
-  toplen = height/6;
+  // Figure out various parameters dynamically according to canvas size.
+  toplen = height/3;
   maxLevels = findlevels(toplen);
   rotAngle = PI/4;
 
   // Set up tree root trunk
   var a = createVector(width/2, height);
-  var b = createVector(width/2, height - 100);
+  var b = createVector(width/2, height - toplen);
   root = new Branch(a, b);
 
   tree[0] = root;
@@ -60,22 +61,24 @@ function draw() {
   }
 
   for (var i = 0; i < leaves.length; i++) {
-    fill(255, 0, 100, 100);
+    fill(255, 0, 100, 80);
     noStroke();
-    ellipse(leaves[i].x, leaves[i].y, 8, 8);
+    ellipse(leaves[i].x, leaves[i].y, toplen/8, toplen/8);
     leaves[i].y += random(0, 2);
   }
 }
 
 function mousePressed() {
-  for(var i = tree.length - 1; i >= 0; i--) {
-    if (!tree[i].finished) {
-      tree.push(tree[i].rightBranch());
-      tree.push(tree[i].leftBranch());
-      tree[i].finished = true;
+  if (count < 6) {
+    for(var i = tree.length - 1; i >= 0; i--) {
+      if (!tree[i].finished) {
+        tree.push(tree[i].rightBranch());
+        tree.push(tree[i].leftBranch());
+        tree[i].finished = true;
+      }
     }
+    count++;
   }
-  count++;
 
   if (count === 6) {
     for (var i = 0; i < tree.length; i++) {
